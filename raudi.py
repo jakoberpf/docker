@@ -57,24 +57,24 @@ def build(tool_name, config, args, tests):
         enable_progress_env = helper.get_env('RAUDI_DOCKER_BUILD_PROGRESS', False)
         enable_progress = False if (enable_progress_env == False) or (enable_progress_env == "False") else "auto"
         try:
-            docker.buildx.build(dirname, load=True, progress=enable_progress, build_args=config['buildargs'], tags="{name}:{tag}".format(name=config['name'], tag=config['version']),)
-            # Tag image as 'latest'
-            docker.tag("{name}:{tag}".format(name=config['name'], tag=config['version']), "{name}:{tag}".format(name=config['name'], tag='latest'))
+            docker.buildx.build(dirname, load=False, push=push_image, progress=enable_progress, platforms=['linux/amd64','linux/arm64'], build_args=config['buildargs'], tags="{name}:{tag}".format(name=config['name'], tag=config['version']),)
+        # Tag image as 'latest'
+        # docker.tag("{name}:{tag}".format(name=config['name'], tag=config['version']), "{name}:{tag}".format(name=config['name'], tag='latest'))
         except Exception:
-            logErr(f"Unable to build {config['name']}:{config['version']}")
+            logErr(f"Unable to build {config['name']}:{config['version']} because of {Exception}")
             Manager().set_exit_code(1) # only set the exit code to 1, but keep creating Docker images
     else:
         log("This version already exists, skipping build.")
     
-    # Pushing if specified and the image exists LOCALLY
-    if push_image and helper.check_if_docker_image_exists("{name}:{tag}".format(name=config['name'], tag=config['version']), False):
-        try:
-            helper.check_if_container_runs(config['name'], config['version'], tests)
-            push(config['name'], config['version'])
-        except Exception as e:
-            logErr(e)
-            logErr("Error running container, push aborted for {docker}:{version}.".format(docker=config['name'], version=config['version']))
-            Manager().set_exit_code(1) # only set the exit code to 1, but keep creating Docker images
+    # # Pushing if specified and the image exists LOCALLY
+    # if push_image and helper.check_if_docker_image_exists("{name}:{tag}".format(name=config['name'], tag=config['version']), False):
+    #     try:
+    #         helper.check_if_container_runs(config['name'], config['version'], tests)
+    #         push(config['name'], config['version'])
+    #     except Exception as e:
+    #         logErr(e)
+    #         logErr("Error running container, push aborted for {docker}:{version}.".format(docker=config['name'], version=config['version']))
+    #         Manager().set_exit_code(1) # only set the exit code to 1, but keep creating Docker images
 
 def build_one(args):
     # Get Manager Singleton

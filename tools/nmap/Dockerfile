@@ -14,7 +14,6 @@ RUN apk add --update --no-cache \
             libpcap \
             libgcc \ 
             libstdc++ \
-            openssl3-dev \
             libretls \
     && update-ca-certificates \
     && rm -rf /var/cache/apk/*

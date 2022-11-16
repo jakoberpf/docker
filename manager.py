@@ -13,7 +13,7 @@ class Manager(object):
             cls.instance = super(Manager, cls).__new__(cls)
         return cls.instance
 
-    def __init__(self, organization='secsi'):
+    def __init__(self, organization='jakoberpf'):
         self._organization = organization
 
     def _tool_name(self, t, depth = 1):

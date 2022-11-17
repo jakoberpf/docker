@@ -58,38 +58,41 @@ def build(tool_name, config, args, tests):
     force_build = args.force
     dirname = DEFAULT_TOOL_DIR + tool_name
 
-    image_exists = helper.check_if_docker_image_exists(
-        "{name}:{tag}".format(name=config['name'], tag=config['version']), remote_src)
-
-    if image_exists == False or force_build == True:
-        log("Building {docker_image}...".format(
-            docker_image="{name}:{tag}".format(name=config['name'], tag=config['version'])))
-        helper.print_docker_build_command(config['name'], config['version'], config['buildargs'])
-        # Build image with develop tag
-        enable_progress_env = helper.get_env('RAUDI_DOCKER_BUILD_PROGRESS', False)
-        enable_progress = False if (enable_progress_env == False) or (enable_progress_env == "False") else "auto"
-        try:
-            docker.buildx.build(dirname, load=False, push=True, progress=enable_progress,
-                                platforms=['linux/amd64', 'linux/arm64'], build_args=config['buildargs'],
-                                tags="{name}:{tag}".format(name=config['name'], tag=config['version']), )
-            # Tag image as 'latest'
-            # docker.tag("{name}:{tag}".format(name=config['name'], tag=config['version']), "{name}:{tag}".format(name=config['name'], tag='latest'))
-        except Exception as e:
-            logErr(f"Unable to build {config['name']}:{config['version']} because of {e}")
-            Manager().set_exit_code(1)  # only set the exit code to 1, but keep creating Docker images
-    else:
-        log("This version already exists, skipping build.")
+    # image_exists = helper.check_if_docker_image_exists(
+    #     "{name}:{tag}".format(name=config['name'], tag=config['version']), remote_src)
+    #
+    # if image_exists == False or force_build == True:
+    log("Building {docker_image}...".format(
+        docker_image="{name}:{tag}".format(name=config['name'], tag=config['version'])))
+    helper.print_docker_build_command(config['name'], config['version'], config['buildargs'])
+    # Build image with develop tag
+    enable_progress_env = helper.get_env('RAUDI_DOCKER_BUILD_PROGRESS', False)
+    enable_progress = False if (enable_progress_env == False) or (enable_progress_env == "False") else "auto"
+    try:
+        docker.buildx.build(dirname, load=False, push=True, progress=enable_progress,
+                            platforms=['linux/amd64', 'linux/arm64'], build_args=config['buildargs'],
+                            tags="{name}:{tag}".format(name=config['name'], tag=config['version']), )
+        # Tag image as 'latest'
+        # docker.tag("{name}:{tag}".format(name=config['name'], tag=config['version']), "{name}:{tag}".format(name=config['name'], tag='latest'))
+    except Exception as e:
+        logErr(f"Unable to build {config['name']}:{config['version']} because of {e}")
+        Manager().set_exit_code(1)  # only set the exit code to 1, but keep creating Docker images
+    # else:
+    #     log("This version already exists, skipping build.")
 
     # Pushing if specified and the image exists LOCALLY
-    if push_image and helper.check_if_docker_image_exists("{name}:{tag}".format(name=config['name'], tag=config['version']), False):
-        try:
-            helper.check_if_container_runs(config['name'], config['version'], tests)
-            docker.tag(tags="{name}:{tag}".format(name=config['localhost'], tag=config['version']), new_tag="{name}:{tag}".format(name=config['name'], tag=config['version']))
-            push(config['name'], config['version'])
-        except Exception as e:
-            logErr(e)
-            logErr("Error running container, push aborted for {docker}:{version}.".format(docker=config['name'], version=config['version']))
-            Manager().set_exit_code(1) # only set the exit code to 1, but keep creating Docker images
+    # if push_image and helper.check_if_docker_image_exists(
+    #         "{name}:{tag}".format(name=config['name'], tag=config['version']), False):
+    #     try:
+    #         helper.check_if_container_runs(config['name'], config['version'], tests)
+    #         docker.tag(tags="{name}:{tag}".format(name=config['localhost'], tag=config['version']),
+    #                    new_tag="{name}:{tag}".format(name=config['name'], tag=config['version']))
+    #         push(config['name'], config['version'])
+    #     except Exception as e:
+    #         logErr(e)
+    #         logErr("Error running container, push aborted for {docker}:{version}.".format(docker=config['name'],
+    #                                                                                       version=config['version']))
+    #         Manager().set_exit_code(1)  # only set the exit code to 1, but keep creating Docker images
 
 
 def build_one(args):

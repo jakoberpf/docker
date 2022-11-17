@@ -8,9 +8,6 @@ ENV PG_MAJOR 13
 RUN apt-get update --fix-missing && \
     apt-get install -y postgresql-server-dev-$PG_MAJOR postgresql-$PG_MAJOR-repmgr openssh-server
 
-COPY ./bin /usr/local/bin/dockerfile
-RUN chmod -R +x /usr/local/bin/dockerfile && ln -s /usr/local/bin/dockerfile/functions/* /usr/local/bin/
-
 # Inherited variables
 # ENV POSTGRES_PASSWORD monkey_pass
 # ENV POSTGRES_USER monkey_user

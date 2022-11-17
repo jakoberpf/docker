@@ -26,4 +26,4 @@ rm -f $MASTER_ROLE_LOCK_FILE_NAME # that file should not be here anyways
 postgres_configure
 
 echo ">>> Starting postgres..."
-exec gosu postgres-repmgr postgres-repmgr &
+exec gosu postgres postgres &

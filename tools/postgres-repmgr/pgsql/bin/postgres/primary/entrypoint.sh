@@ -2,7 +2,7 @@
 set -e
 FORCE_RECONFIGURE=1 postgres_configure
 
-# We need to create postgres-repmgr user explicitly,
+# We need to create postgres user explicitly,
 # see https://github.com/docker-library/postgres/commit/3f585c58df93e93b730c09a13e8904b96fa20c58
 if [ ! "$POSTGRES_USER" = "postgres" ]; then
 	echo ">>> Creating postgres user explicitly"

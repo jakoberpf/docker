@@ -42,6 +42,7 @@ else
     fi
 fi
 
+mkdir -p $PGDATA
 chown -R postgres $PGDATA && chmod -R 0700 $PGDATA
 
 source /usr/local/bin/cluster/repmgr/configure.sh

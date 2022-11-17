@@ -6,17 +6,10 @@ FROM postgres:13
 ENV PG_MAJOR 13
 
 RUN apt-get update --fix-missing && \
-    apt-get install -y postgresql-server-dev-$PG_MAJOR wget make openssh-server
+    apt-get install -y postgresql-server-dev-$PG_MAJOR postgresql-$PG_MAJOR-repmgr openssh-server
 
 COPY ./bin /usr/local/bin/dockerfile
 RUN chmod -R +x /usr/local/bin/dockerfile && ln -s /usr/local/bin/dockerfile/functions/* /usr/local/bin/
-
-#RUN install_deb_pkg "atalia.postgresql.org/morgue/repmgr-common_5.0.0-4.pgdg+1_all.deb"
-#RUN install_deb_pkg "atalia.postgresql.org/morgue/postgresql-$PG_MAJOR-repmgr_5.0.0-4.pgdg+1_arm64.deb"
-
-RUN wget https://repmgr.org/download/repmgr-5.2.1.tar.gz -O repmgr-5.2.1.tar.gz && \
-    tar -xvf repmgr-5.2.1.tar.gz && \
-    make install
 
 # Inherited variables
 # ENV POSTGRES_PASSWORD monkey_pass
@@ -32,14 +25,13 @@ ENV REPLICATION_USER replication_user
 ENV REPLICATION_PASSWORD replication_pass
 ENV REPLICATION_PRIMARY_PORT 5432
 
-
 # Host for replication (REQUIRED, NO DEFAULT)
 # ENV REPLICATION_PRIMARY_HOST
 
 # Integer number of node (NO DEFAULT) 
 # ENV NODE_ID 1
-                # if not defined, will be generated from the last number in NODE_NAME variable
-                # e.g. NODE_NAME=node-1 will give node identifier 1002
+# if not defined, will be generated from the last number in NODE_NAME variable
+# e.g. NODE_NAME=node-1 will give node identifier 1002
 
 # Node name (REQUIRED, NO DEFAULT)
 # ENV NODE_NAME node-1
@@ -52,8 +44,8 @@ ENV NODE_PRIORITY 100
 
 ENV CONFIGS_DELIMITER_SYMBOL ,
 ENV CONFIGS_ASSIGNMENT_SYMBOL :
-                                #CONFIGS_DELIMITER_SYMBOL and CONFIGS_ASSIGNMENT_SYMBOL are used to parse CONFIGS variable
-                                # if CONFIGS_DELIMITER_SYMBOL=| and CONFIGS_ASSIGNMENT_SYMBOL=>, valid configuration string is var1>val1|var2>val2
+#CONFIGS_DELIMITER_SYMBOL and CONFIGS_ASSIGNMENT_SYMBOL are used to parse CONFIGS variable
+# if CONFIGS_DELIMITER_SYMBOL=| and CONFIGS_ASSIGNMENT_SYMBOL=>, valid configuration string is var1>val1|var2>val2
 
 ENV REPMGR_MAJOR 4
 ENV REPMGR_NODES_TABLE nodes

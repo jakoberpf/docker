@@ -6,7 +6,7 @@ FROM postgres:13
 ENV PG_MAJOR 13
 
 RUN apt-get update --fix-missing && \
-    apt-get install -y postgresql-server-dev-$PG_MAJOR wget openssh-server
+    apt-get install -y postgresql-server-dev-$PG_MAJOR wget make openssh-server
 
 COPY ./bin /usr/local/bin/dockerfile
 RUN chmod -R +x /usr/local/bin/dockerfile && ln -s /usr/local/bin/dockerfile/functions/* /usr/local/bin/

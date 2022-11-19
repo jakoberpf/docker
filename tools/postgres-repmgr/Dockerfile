@@ -6,7 +6,7 @@ FROM postgres:13
 ENV PG_MAJOR 13
 
 RUN apt-get update --fix-missing && \
-    apt-get install -y postgresql-server-dev-$PG_MAJOR postgresql-$PG_MAJOR-repmgr openssh-server
+    apt-get install -y postgresql-server-dev-$PG_MAJOR postgresql-$PG_MAJOR-repmgr openssh-server iputils-ping dnsutils
 
 # Inherited variables
 # ENV POSTGRES_PASSWORD monkey_pass

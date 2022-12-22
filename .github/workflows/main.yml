@@ -31,7 +31,7 @@ jobs:
       # Setup python
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.9.9' # Version range or exact version of a Python version to use
+          python-version: '3.9.12' # Version range or exact version of a Python version to use
       
       # Install dependencies
       - name: Install dependencies

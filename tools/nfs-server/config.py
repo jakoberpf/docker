@@ -6,7 +6,7 @@ def get_config(organization, common_args):
 
     config = {
         'name': organization + '/nfs-server',
-        'version': "rolling",
+        'version': "latest",
         'version-develop': 'develop',
         'buildargs': {
             'LATEST_ALPINE_VERSION': common_args['LATEST_ALPINE_VERSION']

@@ -6,7 +6,7 @@ def get_config(organization, common_args):
 
     config = {
         'name': organization + '/nfs-server',
-        'version': helper.clean_version(api_results['NMAP_GITHUB_INFO']),
+        'version': "rolling",
         'version-develop': 'develop',
         'buildargs': {
             'LATEST_ALPINE_VERSION': common_args['LATEST_ALPINE_VERSION']

@@ -9,7 +9,7 @@ def get_config(organization, common_args):
     config = {
         'name': organization + '/postgres-repmgr',
         'version': '13',
-        'version-develop': '13-develop',
+        'version-develop': 'develop',
         'buildargs': {
             'LATEST_ALPINE_VERSION': common_args['LATEST_ALPINE_VERSION'],
             # 'REPMGR_GITHUB_RELEASE_VERSION': api_results['REPMGR_GITHUB_RELEASE_VERSION'],

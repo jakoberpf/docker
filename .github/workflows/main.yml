@@ -17,6 +17,10 @@ jobs:
         # containers-ci: []
         # containers: []
 
+    defaults:
+      run:
+        working-directory: ${{ matrix.containers-base }}
+
     steps:
       - uses: actions/checkout@v3
 
@@ -34,7 +38,6 @@ jobs:
 
       - name: Build and push
         uses: docker/build-push-action@v4
-        working-directory: ${{ matrix.containers-base }}
         with:
           context: .
           platforms: linux/amd64,linux/arm64

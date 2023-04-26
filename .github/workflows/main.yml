@@ -38,7 +38,7 @@ jobs:
         with:
           context: .
           platforms: linux/amd64,linux/arm64
-          push: true
-          tags: user/app:latest
+          push: false
+          tags: jakoberpf/${{ matrix.containers-base }}:latest
 
 

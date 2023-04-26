@@ -36,9 +36,6 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_API_TOKEN }}
 
-      - name: Login Docker
-        run: ls
-
       - name: Build and push
         uses: docker/build-push-action@v4
         with:

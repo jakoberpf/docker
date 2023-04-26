@@ -36,10 +36,13 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_API_TOKEN }}
 
+      - name: Login Docker
+        run: ls
+
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: .
+          context: ${{ matrix.containers-base }}
           platforms: linux/amd64,linux/arm64
           push: false
           tags: jakoberpf/${{ matrix.containers-base }}:latest

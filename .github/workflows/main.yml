@@ -17,8 +17,7 @@ jobs:
         containers-base:
           - base/alpine
           - base/debian
-        # containers-ci: []
-        # containers: []
+          - app/bashhub-server
 
     defaults:
       run:
@@ -67,8 +66,7 @@ jobs:
         containers-base:
           - base/alpine
           - base/debian
-        # containers-ci: []
-        # containers: []
+          - app/bashhub-server
 
     defaults:
       run:

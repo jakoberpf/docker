@@ -102,7 +102,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ github.repository }}/${{ env.DOCKER_IMAGE_NAME }}
+          images: ghcr.io/${{ github.repository }}/${{ env.DOCKER_IMAGE_NAME }}
 
       # https://docs.github.com/en/actions/publishing-packages/publishing-docker-images
       - name: Build and push Docker image to Github Registry
@@ -111,6 +111,7 @@ jobs:
           context: ${{ matrix.containers-base }}
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ github.repository }}/${{ env.DOCKER_IMAGE_NAME }}:latest
+          tags: ghcr.io/${{ github.repository }}/${{ env.DOCKER_IMAGE_NAME }}:latest
           labels: ${{ steps.meta.outputs.labels }}
 
+# https://docs.github.com/en/actions/publishing-packages/publishing-docker-images#publishing-images-to-docker-hub-and-github-packages

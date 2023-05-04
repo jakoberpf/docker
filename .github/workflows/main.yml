@@ -37,12 +37,15 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_API_TOKEN }}
 
-      - name: Build and push
+      - name: Generate Image Name
+        run: echo "DOCKER_IMAGE_NAME=$(echo ${{ matrix.containers-base }} | tr '/' '-')" >> $GITHUB_ENV
+
+      - name: Build and Push
         uses: docker/build-push-action@v4
         with:
           context: ${{ matrix.containers-base }}
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: jakoberpf/alpine:latest
+          tags: jakoberpf/${{ env.DOCKER_IMAGE_NAME }}:latest
 
 # https://docs.github.com/en/actions/publishing-packages/publishing-docker-images

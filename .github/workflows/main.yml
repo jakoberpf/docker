@@ -16,7 +16,7 @@ jobs:
       matrix:
         containers-base:
           - base/alpine
-          # - base/debian
+          - base/debian
         # containers-ci: []
         # containers: []
 

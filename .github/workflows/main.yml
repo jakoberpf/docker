@@ -57,6 +57,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: jakoberpf/${{ env.DOCKER_IMAGE_NAME }}:latest
+          labels: ${{ steps.meta.outputs.labels }}
 
   ghcr:
 
@@ -111,4 +112,5 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ github.repository }}/${{ env.DOCKER_IMAGE_NAME }}:latest
+          labels: ${{ steps.meta.outputs.labels }}
 

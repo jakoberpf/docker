@@ -1,4 +1,6 @@
-name: Build docker images
+name: Build docker images for hub.docker.io and ghcr.io
+
+# https://brunoscheufler.com/blog/2021-10-09-generating-dynamic-github-actions-workflows-with-the-job-matrix-strategy
 
 on:
   push:
@@ -6,7 +8,7 @@ on:
       - main
 
 jobs:
-  # This workflow contains a single job called "raudi"
+
   docker:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -31,16 +33,24 @@ jobs:
       - name: Setup Docker
         uses: docker/setup-buildx-action@v2
 
-      - name: Login Docker
+      - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_API_TOKEN }}
 
-      - name: Generate Image Name
+      - name: Generate image name
         run: echo "DOCKER_IMAGE_NAME=$(echo ${{ matrix.containers-base }} | tr '/' '-')" >> $GITHUB_ENV
 
-      - name: Build and Push
+      # https://github.com/docker/metadata-action
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: jakoberpf/${{ env.DOCKER_IMAGE_NAME }}
+
+      # https://docs.github.com/en/actions/publishing-packages/publishing-docker-images
+      - name: Build and push Docker image to Docker Hub
         uses: docker/build-push-action@v4
         with:
           context: ${{ matrix.containers-base }}
@@ -48,4 +58,57 @@ jobs:
           push: true
           tags: jakoberpf/${{ env.DOCKER_IMAGE_NAME }}:latest
 
-# https://docs.github.com/en/actions/publishing-packages/publishing-docker-images
+  ghcr:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        containers-base:
+          - base/alpine
+          # - base/debian
+        # containers-ci: []
+        # containers: []
+
+    defaults:
+      run:
+        working-directory: ${{ matrix.containers-base }}
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Setup Docker
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate image name
+        run: echo "DOCKER_IMAGE_NAME=$(echo ${{ matrix.containers-base }} | tr '/' '-')" >> $GITHUB_ENV
+
+      # https://github.com/docker/metadata-action
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ github.repository }}/${{ env.DOCKER_IMAGE_NAME }}
+
+      # https://docs.github.com/en/actions/publishing-packages/publishing-docker-images
+      - name: Build and push Docker image to Github Registry
+        uses: docker/build-push-action@v4
+        with:
+          context: ${{ matrix.containers-base }}
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ github.repository }}/${{ env.DOCKER_IMAGE_NAME }}:latest
+

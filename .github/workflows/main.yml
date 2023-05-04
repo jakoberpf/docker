@@ -14,7 +14,7 @@ jobs:
       matrix:
         containers-base:
           - base/alpine
-          - base/debian
+          # - base/debian
         # containers-ci: []
         # containers: []
 
@@ -43,6 +43,6 @@ jobs:
           context: ${{ matrix.containers-base }}
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: jakoberpf/${{ matrix.containers-base }}:latest
+          tags: jakoberpf/alpine:latest
 
 # https://docs.github.com/en/actions/publishing-packages/publishing-docker-images

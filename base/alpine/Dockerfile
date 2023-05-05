@@ -1,5 +1,5 @@
 FROM alpine:3.17.3
 
-RUN apk add --no-cache nano
+RUN apk update && apk add --no-cache nano
 
-ENTRYPOINT ["<executable>"]
+CMD ["/bin/bash"]

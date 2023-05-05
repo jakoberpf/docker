@@ -1,5 +1,5 @@
 FROM debian:11.7-slim
 
-RUN apt update
+RUN apt-get update && apt-get install nano
 
-ENTRYPOINT ["<executable>"]
+CMD ["/bin/bash"]

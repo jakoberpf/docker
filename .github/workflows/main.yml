@@ -50,7 +50,7 @@ jobs:
 
       # https://docs.github.com/en/actions/publishing-packages/publishing-docker-images
       - name: Build and push Docker image to Docker Hub
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: ${{ matrix.containers-base }}
           platforms: linux/amd64,linux/arm64
@@ -104,7 +104,7 @@ jobs:
 
       # https://docs.github.com/en/actions/publishing-packages/publishing-docker-images
       - name: Build and push Docker image to Github Registry
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: ${{ matrix.containers-base }}
           platforms: linux/amd64,linux/arm64

@@ -1,4 +1,4 @@
-FROM alpine:3.18
+FROM alpine:3.24
 
 ENV BASHHUB_VERSION v0.2.5
 
